@@ -42,6 +42,7 @@ jobs:
       # It uses the Git commit SHA to create a unique tag for the image.
       - name: 'Build and push image to ACR'
         run: |
-          docker build ./frontend -t ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend:${{ github.sha }}
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend:${{ github.sha }}
-
+          docker build ./frontend \
+            -t ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend:${{ github.sha }} \
+            -t ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend:latest
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend --all-tags
