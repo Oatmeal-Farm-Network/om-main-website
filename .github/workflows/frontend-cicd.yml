@@ -19,6 +19,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # ---- ADD THIS NEW STEP HERE ----
+      - name: 'Debug: Check Secret Keys'
+        run: |
+          echo "Checking the structure of the credentials secret..."
+          echo '${{ secrets.AZURE_CREDENTIALS }}' | jq 'keys'
+      # --------------------------------
+
       # Logs into Azure using the credentials stored in GitHub secrets
       - name: 'Az CLI login'
         uses: azure/login@v1
