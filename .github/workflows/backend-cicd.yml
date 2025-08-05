@@ -36,6 +36,7 @@ jobs:
       # This is great for tracking which version of the code is deployed.
       - name: 'Build and push image to ACR'
         run: |
-          docker build ./backend -t ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/backend:${{ github.sha }}
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/backend:${{ github.sha }}
-
+          docker build ./backend \
+            -t ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/backend:${{ github.sha }} \
+            -t ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/backend:latest
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/backend --all-tags
