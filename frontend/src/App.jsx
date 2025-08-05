@@ -40,7 +40,7 @@ const App = () => {
     custAIEndService: new Date(2026, 0, 15) // January 15, 2026
   };
 
-  const peopleId = 12345; // This would come from your authentication system
+  const peopleId = 1234; // This would come from your authentication system
 
   if (loading) {
     return <div>Loading...</div>;
