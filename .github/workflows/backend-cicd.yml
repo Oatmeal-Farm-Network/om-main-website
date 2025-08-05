@@ -1,4 +1,4 @@
-# .github/workflows/backend-cicd.yml
+# .github/workflows/backend-cicd.yml for backend
 # This workflow builds and pushes the Django backend Docker image to Azure Container Registry (ACR)
 
 name: Build and Push Backend to ACR
