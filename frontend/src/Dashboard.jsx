@@ -10,7 +10,7 @@ const Dashboard = ({
 }) => {
   const [accountStatus, setAccountStatus] = useState('');
 
-  // Mock data (replace with your actual data fetching logic)
+  // Mock data (should replace with your actual data fetching logic)
   const mockData = {
     currentUser: {
       isFirstTime: true,
