@@ -1,0 +1,33 @@
+# Specifies the version of the Docker Compose file format. '3.8' is a recent, stable version.
+version: '3.8'
+
+# This is the main section where we define our application's services (containers).
+services:
+  # Defines the backend service, which will run your Django application.
+  backend:
+    # Tells Docker Compose to build an image from the Dockerfile located in the './backend' directory.
+    build: ./backend
+    # Maps port 8000 of your host machine to port 8000 of the container.
+    # This lets you access the Django app at http://localhost:8000.
+    ports:
+      - "8000:8000"
+    # Mounts the local './backend' directory into the '/app' directory inside the container.
+    # This means changes you make to your local code will be reflected inside the container,
+    # though you'll likely need to restart the container for Django's server to pick them up.
+    volumes:
+      - ./backend:/app
+
+  # Defines the frontend service, which will run your React application.
+  frontend:
+    # Tells Docker Compose to build an image from the Dockerfile in the './frontend' directory.
+    build: ./frontend
+    # Maps port 3000 of your host machine to port 80 of the container.
+    # Your React Dockerfile uses Nginx, which serves files on port 80 by default.
+    # This lets you access the React app at http://localhost:3000.
+    ports:
+      - "3000:80"
+    # This is a crucial instruction for networking. It tells Docker Compose to
+    # start the 'backend' service before it starts the 'frontend' service.
+    depends_on:
+      - backend
+
