@@ -1,5 +1,6 @@
 # .github/workflows/frontend-cicd.yml
 # This workflow builds and pushes the React frontend Docker image to Azure Container Registry (ACR)
+#test
 
 name: Build and Push Frontend to ACR
 
@@ -18,6 +19,13 @@ jobs:
       # Checks out the repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      # ---- ADD THIS NEW STEP HERE ----
+      - name: 'Debug: Check Secret Keys'
+        run: |
+          echo "Checking the structure of the credentials secret..."
+          echo '${{ secrets.AZURE_CREDENTIALS }}' | jq 'keys'
+      # --------------------------------
 
       # Logs into Azure using the credentials stored in GitHub secrets
       - name: 'Az CLI login'
