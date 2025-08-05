@@ -1,0 +1,41 @@
+# .github/workflows/backend-cicd.yml
+# This workflow builds and pushes the Django backend Docker image to Azure Container Registry (ACR)
+
+name: Build and Push Backend to ACR
+
+# This workflow runs on any push to the main branch
+on:
+  push:
+    branches: [ "main" ]
+    # Only run this workflow if changes are detected in the 'backend' directory
+    paths:
+      - 'backend/**'
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks out the repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Logs into Azure using the credentials stored in GitHub secrets
+      # You will need to set up these secrets in your repository settings
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Logs into your specific Azure Container Registry
+      - name: 'Login to ACR'
+        run: |
+          az acr login --name ${{ secrets.ACR_NAME }}
+
+      # This step builds the Docker image and pushes it to your ACR.
+      # It uses the Git commit SHA to create a unique tag for the image.
+      # This is great for tracking which version of the code is deployed.
+      - name: 'Build and push image to ACR'
+        run: |
+          docker build ./backend -t ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/backend:${{ github.sha }}
+          docker push ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/backend:${{ github.sha }}
+
