@@ -1,27 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import Dashboard from './Dashboard';
+import Header from './components/Header';
+import SubHeader from './components/SubHeader';
+import MyAccount from './components/MyAccount';
+import Organizations from './components/Organizations';
+import './App.css'; // Changed from Dashboard.css
 
 const App = () => {
   const [organizations, setOrganizations] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Sample data that would typically come from your API/database
-  // This replicates the SQL query from the ASP file:
-  // "SELECT * from businessaccess, business, businesstypelookup WHERE businessaccess.Businessid = business.businessid and Business.BusinessTYPeID = businesstypelookup.Businesstypeid and PeopleID = [PeopleID] order by BusinessTypeIDOrder"
-  
   useEffect(() => {
-    // Simulating API call - replace this with your actual API call
     const fetchOrganizations = async () => {
       try {
-        // Mock data representing the database query results
         const mockOrganizations = [
-          // All organizations have been deleted as requested
+           // Example data - this would come from your API
+           { BusinessID: 101, BusinessName: 'Sunny Meadow Farm', BusinessType: 'Farm' },
+           { BusinessID: 102, BusinessName: 'Green Valley Co-op', BusinessType: 'Association' },
         ];
-
-        // In a real app, you would make an API call here:
-        // const response = await fetch('/api/organizations?peopleId=' + peopleId);
-        // const organizations = await response.json();
-        
         setOrganizations(mockOrganizations);
         setLoading(false);
       } catch (error) {
@@ -29,34 +24,35 @@ const App = () => {
         setLoading(false);
       }
     };
-
     fetchOrganizations();
   }, []);
 
-  // Sample user data
   const currentUser = {
+    name: 'Charlie',
     isFirstTime: false,
-    subscriptionLevel: 4, // Premium
-    custAIEndService: new Date(2026, 0, 15) // January 15, 2026
+    subscriptionLevel: 4, // 4 = Premium
+    custAIEndService: new Date(2026, 0, 15) // Jan 15, 2026
   };
-
-  const peopleId = 1234; // This would come from your authentication system
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div style={{ fontFamily: 'Inter, sans-serif', padding: '20px', backgroundColor: '#f8fafc', minHeight: '100vh' }}>
-      <Dashboard
-        peopleId={peopleId}
-        showMembership={false} // Set to true to show membership renewal card
-        hideFavorite={true}   // Set to false to show favorite association card
-        organizations={organizations}
-        currentUser={currentUser}
-      />
+    <div className="app-container">
+      <Header />
+      <SubHeader userName={currentUser.name} organizations={organizations} />
+      <main className="main-content">
+        <div className="dashboard-layout">
+          <MyAccount
+            level={currentUser.subscriptionLevel}
+            endDate={currentUser.custAIEndService}
+          />
+          <Organizations />
+        </div>
+      </main>
     </div>
   );
 };
 
-export default App; 
+export default App;
