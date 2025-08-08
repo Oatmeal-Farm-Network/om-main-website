@@ -30,7 +30,7 @@ export default async function HomePage() {
     custAIEndService: new Date(2026, 0, 15) // Jan 15, 2026
   };
 
-  // Render the page. The data is already here when the page loads.
+  // Render the page, The data is already here when the page loads.
   return (
     <>
       <SubHeader userName={currentUser.name} organizations={organizations} />
