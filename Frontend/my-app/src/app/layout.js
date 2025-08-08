@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
       <body>
         <div className="app-container">
           <Header />
-          {/* Page specific content will be rendered here */}
+          {/* Page specific content will be rendered Here */}
           <main className="main-content">{children}</main>
         </div>
       </body>

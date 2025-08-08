@@ -47,4 +47,4 @@ jobs:
         run: |
           az webapp config container set --name om-mainwbsite-frontend-2025 \
             --resource-group oatmeal-main-website \
-            --docker-custom-image-name ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend:${{ github.sha }}
+            --container-image-name ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend:${{ github.sha }}
