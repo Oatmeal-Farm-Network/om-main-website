@@ -1,6 +1,4 @@
 # .github/workflows/frontend-cicd.yml
-# This workflow builds and pushes the React frontend Docker image to Azure Container Registry (ACR)
-#test
 
 name: Build and Push Frontend to ACR
 
@@ -8,42 +6,40 @@ name: Build and Push Frontend to ACR
 on:
   push:
     branches: [ "main" ]
-    # Only run this workflow if changes are detected in the 'frontend' directory
+    # CRITICAL FIX: The path is now case-sensitive and points to the correct folder.
     paths:
-      - 'frontend/**'
+      - 'Frontend/my-app/**'
 
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
     steps:
-      # Checks out the repository under $GITHUB_WORKSPACE, so your job can access it
+      # Step 1: Checks out the repository
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Updated to the latest version
 
-      # ---- ADD THIS NEW STEP HERE ----
-      - name: 'Debug: Check Secret Keys'
-        run: |
-          echo "Checking the structure of the credentials secret..."
-          echo '${{ secrets.AZURE_CREDENTIALS }}' | jq 'keys'
-      # --------------------------------
-
-      # Logs into Azure using the credentials stored in GitHub secrets
+      # Step 2: Log in to Azure (optional if you have separate ACR credentials)
       - name: 'Az CLI login'
-        uses: azure/login@v1
+        uses: azure/login@v2 # Updated to the latest version
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Logs into your specific Azure Container Registry
-      - name: 'Login to ACR'
-        run: |
-          az acr login --name ${{ secrets.ACR_NAME }}
+      # Step 3: Log in to Azure Container Registry (ACR)
+      # This is the modern, recommended action for logging into ACR.
+      - name: Login to ACR
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.ACR_NAME }}.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }} # You'll need to add this secret
+          password: ${{ secrets.ACR_PASSWORD }} # You'll need to add this secret
 
-      # This step builds the Docker image and pushes it to your ACR.
-      # It uses the Git commit SHA to create a unique tag for the image.
-      #fixed frontend path
-      - name: 'Build and push image to ACR'
-        run: |
-          docker build ./Frontend/my-app \ 
-            -t ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend:${{ github.sha }} \
-            -t ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend:latest
-          docker push ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend --all-tags
+      # Step 4: Build and push the Docker image
+      # This single action handles both building and pushing in a highly optimized way.
+      - name: Build and push image to ACR
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Frontend/my-app # Correct build context
+          push: true
+          tags: |
+            ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend:${{ github.sha }}
+            ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend:latest
