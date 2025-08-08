@@ -16,7 +16,7 @@ WORKDIR /app
 # Install Python dependencies
 # Upgrade pip and install gunicorn for the server
 RUN pip install --upgrade pip
-RUN pip install gunicorn
+
 
 # Copy the requirements file into the container at /app
 # IMPORTANT: You need to create a requirements.txt file in your 'backend' directory.
