@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
-# Base Directory
+# base Directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: should keep the secret key used in production secret

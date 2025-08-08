@@ -33,8 +33,7 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }} # You'll need to add this secret
           password: ${{ secrets.ACR_PASSWORD }} # You'll need to add this secret
 
-      # Step 4: Build and push the Docker image
-      # This single action handles both building and pushing in a highly optimized way.
+      # Step 4: Build and push the Docker image with unique tag
       - name: Build and push image to ACR
         uses: docker/build-push-action@v5
         with:
@@ -42,4 +41,10 @@ jobs:
           push: true
           tags: |
             ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend:${{ github.sha }}
-            ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend:latest
+
+      # Step 5: Update App Service to use the new image tag
+      - name: Update App Service with new image
+        run: |
+          az webapp config container set --name om-mainwbsite-frontend-2025 \
+            --resource-group oatmeal-main-website \
+            --docker-custom-image-name ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/frontend:${{ github.sha }}
