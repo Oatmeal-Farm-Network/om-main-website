@@ -1,6 +1,6 @@
 // src/app/layout.js
 import './globals.css'; // This now contains your styling
-import Header from '../components/Header'; // Import your Header
+import Header from '../components/Header'; // Import your header
 
 export const metadata = {
   title: 'Oatmeal Farm Network',
