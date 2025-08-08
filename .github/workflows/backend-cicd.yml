@@ -41,6 +41,6 @@ jobs:
       # Update App Service to use the new image tag
       - name: Update App Service with new image
         run: |
-          az webapp config container set --name YOUR_BACKEND_APP_SERVICE_NAME \
+          az webapp config container set --name om-mainwbsite-backend-2025 \
             --resource-group oatmeal-main-website \
-            --docker-custom-image-name ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/backend:${{ github.sha }}
+            --container-image-name ${{ secrets.ACR_NAME }}.azurecr.io/om-main-website/backend:${{ github.sha }}
