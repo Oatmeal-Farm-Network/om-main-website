@@ -35,7 +35,7 @@ body {
 /* Default size for desktop */
 .logo {
   height: 70px;
-  /* Adjust this to your desired desktop size */
+  /* Adjust according  to your desired desktop size */
   width: auto;
   /* This is important for maintaining the aspect ratio */
 }
